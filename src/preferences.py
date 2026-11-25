@@ -20,6 +20,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
     toggle_export_dir = Gtk.Template.Child()
     row_export_dir = Gtk.Template.Child()
     button_export_dir = Gtk.Template.Child()
+    toggle_export_dir_suffix_prefix = Gtk.Template.Child()
     spin_timeout = Gtk.Template.Child()
     spin_png_lossy_level = Gtk.Template.Child()
     spin_png_lossless_level = Gtk.Template.Child()
@@ -66,6 +67,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
         )
 
         # Prefix-Suffix
+        self.entry_suffix_prefix.set_text(self.settings.suffix_prefix)
         self.entry_suffix_prefix.connect(
             "changed", self.on_string_changed, "suffix-prefix"
         )
@@ -73,21 +75,24 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
         if self.settings.export_dir:
             self.toggle_new_file.set_active(True)
             self.toggle_new_file.set_sensitive(False)
-            self.toggle_naming_mode.set_sensitive(True)
-            self.entry_suffix_prefix.set_sensitive(True)
-            self.entry_suffix_prefix.set_text(self.settings.export_suffix_prefix)
         else:
             self.toggle_new_file.set_active(self.settings.new_file)
             self.toggle_new_file.set_sensitive(True)
-            self.toggle_naming_mode.set_sensitive(self.settings.new_file)
-            self.entry_suffix_prefix.set_sensitive(self.settings.new_file)
-            self.entry_suffix_prefix.set_text(self.settings.suffix_prefix)
 
         # Custom Export Directory
         self.toggle_export_dir.set_active(self.settings.export_dir)
         self.toggle_export_dir.connect("notify::active", self.on_export_dir_toggled)
         self._update_export_dir_row()
         self.button_export_dir.connect("clicked", self.on_select_export_dir)
+
+        # Use suffix/prefix in custom export directory
+        self.toggle_export_dir_suffix_prefix.set_active(
+            self.settings.export_dir_suffix_prefix
+        )
+        self.toggle_export_dir_suffix_prefix.connect(
+            "notify::active", self.on_bool_changed, "export-dir-suffix-prefix"
+        )
+        self._update_sensitive()
 
         # Compression Timeout
         self.spin_timeout.set_value(self.settings.compression_timeout)
@@ -146,8 +151,10 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
             new_file = self.settings.new_file
             self.parent.set_saving_subtitle(new_file)
             self.parent.show_warning_banner()
-            self.toggle_naming_mode.set_sensitive(new_file)
-            self.entry_suffix_prefix.set_sensitive(new_file)
+            self._update_sensitive()
+        elif key == "export-dir-suffix-prefix":
+            self.parent.set_saving_subtitle()
+            self._update_sensitive()
 
     def on_selected_item(self, combo, _, key):
         self.settings.set_int(key, combo.get_selected())
@@ -159,16 +166,22 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
     def on_string_changed(self, entry, key):
         if key == "suffix-prefix":
             text = entry.get_text()
-            if self.settings.export_dir:
-                self.settings.export_suffix_prefix = text
-            else:
-                self.settings.set_string(key, text)
-                if not self.settings.suffix_prefix:
-                    self.settings.reset("suffix-prefix")
+            self.settings.set_string(key, text)
+            if not self.settings.suffix_prefix:
+                self.settings.reset("suffix-prefix")
             self.parent.set_saving_subtitle()
 
     def on_int_changed(self, spin, _, key):
         self.settings.set_int(key, spin.get_value())
+
+    def _update_sensitive(self):
+        is_export = self.settings.export_dir
+        self.toggle_export_dir_suffix_prefix.set_visible(is_export)
+        self.toggle_naming_mode.set_sensitive(self.settings.new_file)
+        self.entry_suffix_prefix.set_sensitive(
+            self.settings.new_file
+            and (not is_export or self.settings.export_dir_suffix_prefix)
+        )
 
     def _update_export_dir_row(self):
         is_enabled = self.settings.export_dir
@@ -187,16 +200,11 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
         if is_export:
             self.toggle_new_file.set_active(True)
             self.toggle_new_file.set_sensitive(False)
-            self.toggle_naming_mode.set_sensitive(True)
-            self.entry_suffix_prefix.set_sensitive(True)
-            self.entry_suffix_prefix.set_text(self.settings.export_suffix_prefix)
         else:
             self.toggle_new_file.set_sensitive(True)
             self.toggle_new_file.set_active(self.settings.new_file)
-            self.toggle_naming_mode.set_sensitive(self.settings.new_file)
-            self.entry_suffix_prefix.set_sensitive(self.settings.new_file)
-            self.entry_suffix_prefix.set_text(self.settings.suffix_prefix)
 
+        self._update_sensitive()
         self.parent.show_warning_banner()
         self.parent.set_saving_subtitle()
 
@@ -221,6 +229,4 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
                         self.parent.show_warning_banner()
                         self.parent.set_saving_subtitle()
 
-        root = self.get_root()
-        parent_window = root if isinstance(root, Gtk.Window) else self.parent
-        dialog.select_folder(parent_window, None, handle_response)
+        dialog.select_folder(self.parent, None, handle_response)

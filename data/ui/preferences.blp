@@ -51,6 +51,12 @@ template $CurtailPrefsDialog: Adw.PreferencesDialog {
         }
       }
 
+      Adw.SwitchRow toggle_export_dir_suffix_prefix {
+        title: _("Use Suffix/Prefix in Export Directory");
+        subtitle: _("Apply the configured suffix or prefix to exported images");
+        visible: false;
+      }
+
       Adw.SwitchRow toggle_recursive {
         title: _("Recursive Compression");
         subtitle: _("Enable or disable compression through subdirectories");

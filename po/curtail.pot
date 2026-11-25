@@ -102,12 +102,13 @@ msgid "Directory path where compressed images will be saved."
 msgstr ""
 
 #: data/com.github.huluti.Curtail.gschema.xml:41
-msgid "Suffix/Prefix to append in custom export directory"
+msgid "Use suffix/prefix in custom export directory"
 msgstr ""
 
 #: data/com.github.huluti.Curtail.gschema.xml:42
 msgid ""
-"Suffix/Prefix to append at new file when exporting to a custom directory."
+"Apply the configured suffix or prefix to images saved in the custom export "
+"directory."
 msgstr ""
 
 #: data/com.github.huluti.Curtail.gschema.xml:46
@@ -182,7 +183,7 @@ msgstr ""
 msgid "Enable maximum cleaning of SVG images."
 msgstr ""
 
-#: data/com.github.huluti.Curtail.gschema.xml:91 data/ui/preferences.blp:70
+#: data/com.github.huluti.Curtail.gschema.xml:91 data/ui/preferences.blp:76
 msgid "Compression Timeout"
 msgstr ""
 
@@ -238,75 +239,83 @@ msgstr ""
 msgid "Export Directory"
 msgstr ""
 
-#: data/ui/preferences.blp:41 src/preferences.py:180
+#: data/ui/preferences.blp:41 src/preferences.py:193
 msgid "No directory selected"
 msgstr ""
 
 #: data/ui/preferences.blp:55
-msgid "Recursive Compression"
+msgid "Use Suffix/Prefix in Export Directory"
 msgstr ""
 
 #: data/ui/preferences.blp:56
-msgid "Enable or disable compression through subdirectories"
-msgstr ""
-
-#: data/ui/preferences.blp:60
-msgid "Keep Metadata"
+msgid "Apply the configured suffix or prefix to exported images"
 msgstr ""
 
 #: data/ui/preferences.blp:61
-msgid "Keep metadata chunks that do not affect rendering"
+msgid "Recursive Compression"
 msgstr ""
 
-#: data/ui/preferences.blp:65
-msgid "Keep File Attributes When Possible"
+#: data/ui/preferences.blp:62
+msgid "Enable or disable compression through subdirectories"
 msgstr ""
 
 #: data/ui/preferences.blp:66
+msgid "Keep Metadata"
+msgstr ""
+
+#: data/ui/preferences.blp:67
+msgid "Keep metadata chunks that do not affect rendering"
+msgstr ""
+
+#: data/ui/preferences.blp:71
+msgid "Keep File Attributes When Possible"
+msgstr ""
+
+#: data/ui/preferences.blp:72
 msgid ""
 "Ensure the new file has the same permissions and timestamps as the original "
 "file"
 msgstr ""
 
-#: data/ui/preferences.blp:71
+#: data/ui/preferences.blp:77
 msgid "Set the timeout between images"
 msgstr ""
 
-#: data/ui/preferences.blp:85
+#: data/ui/preferences.blp:91
 msgid "Formats"
 msgstr ""
 
-#: data/ui/preferences.blp:92 data/ui/preferences.blp:118
-#: data/ui/preferences.blp:138
+#: data/ui/preferences.blp:98 data/ui/preferences.blp:124
+#: data/ui/preferences.blp:144
 msgid "Lossy Compression"
 msgstr ""
 
-#: data/ui/preferences.blp:93 data/ui/preferences.blp:119
-#: data/ui/preferences.blp:139
+#: data/ui/preferences.blp:99 data/ui/preferences.blp:125
+#: data/ui/preferences.blp:145
 msgid "Set the quality of the generated image, 100 is the best quality"
 msgstr ""
 
-#: data/ui/preferences.blp:103 data/ui/preferences.blp:149
+#: data/ui/preferences.blp:109 data/ui/preferences.blp:155
 msgid "Lossless Compression"
 msgstr ""
 
-#: data/ui/preferences.blp:104 data/ui/preferences.blp:150
+#: data/ui/preferences.blp:110 data/ui/preferences.blp:156
 msgid "Set the level of compression, 6 is the highest but slowest level"
 msgstr ""
 
-#: data/ui/preferences.blp:129
+#: data/ui/preferences.blp:135
 msgid "Progressive Encode"
 msgstr ""
 
-#: data/ui/preferences.blp:130
+#: data/ui/preferences.blp:136
 msgid "Enable incremental image rendering, going from blurry to clear"
 msgstr ""
 
-#: data/ui/preferences.blp:164
+#: data/ui/preferences.blp:170
 msgid "Maximum Compression Level"
 msgstr ""
 
-#: data/ui/preferences.blp:165
+#: data/ui/preferences.blp:171
 msgid "This can be more destructive for the image"
 msgstr ""
 
@@ -409,7 +418,7 @@ msgstr ""
 msgid "Can't find the compressed file"
 msgstr ""
 
-#: src/preferences.py:204
+#: src/preferences.py:212
 msgid "Select Export Directory"
 msgstr ""
 

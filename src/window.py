@@ -205,7 +205,11 @@ class CurtailWindow(Adw.ApplicationWindow):
                 os.path.basename(self.settings.export_dir_path)
                 or self.settings.export_dir_path
             )
-            suffix_prefix = self.settings.export_suffix_prefix
+            suffix_prefix = (
+                self.settings.suffix_prefix
+                if self.settings.export_dir_suffix_prefix
+                else ""
+            )
             if suffix_prefix:
                 if self.settings.naming_mode == 0:
                     label = _(
