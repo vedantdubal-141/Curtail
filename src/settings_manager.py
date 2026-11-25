@@ -86,20 +86,20 @@ class SettingsManager:
         self._settings.set_boolean("file-attributes", value)
 
     @property
-    def export_dir_enabled(self) -> bool:
-        return self._settings.get_boolean("export-dir-enabled")
-
-    @export_dir_enabled.setter
-    def export_dir_enabled(self, value: bool) -> None:
-        self._settings.set_boolean("export-dir-enabled", value)
-
-    @property
-    def export_dir(self) -> str:
-        return self._settings.get_string("export-dir")
+    def export_dir(self) -> bool:
+        return self._settings.get_boolean("export-dir")
 
     @export_dir.setter
-    def export_dir(self, value: str) -> None:
-        self._settings.set_string("export-dir", value)
+    def export_dir(self, value: bool) -> None:
+        self._settings.set_boolean("export-dir", value)
+
+    @property
+    def export_dir_path(self) -> str:
+        return self._settings.get_string("export-dir-path")
+
+    @export_dir_path.setter
+    def export_dir_path(self, value: str) -> None:
+        self._settings.set_string("export-dir-path", value)
 
     @property
     def export_suffix_prefix(self) -> str:
@@ -111,7 +111,7 @@ class SettingsManager:
 
     @property
     def is_custom_export(self) -> bool:
-        return self.export_dir_enabled and bool(self.export_dir)
+        return self.export_dir and bool(self.export_dir_path)
 
     @property
     def is_safe(self) -> bool:

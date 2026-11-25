@@ -202,7 +202,8 @@ class CurtailWindow(Adw.ApplicationWindow):
 
         if self.settings.is_custom_export:
             export_folder_name = (
-                os.path.basename(self.settings.export_dir) or self.settings.export_dir
+                os.path.basename(self.settings.export_dir_path)
+                or self.settings.export_dir_path
             )
             suffix_prefix = self.settings.export_suffix_prefix
             if suffix_prefix:

@@ -65,7 +65,7 @@ class ResultItemManager:
         suffix_prefix = self.settings.suffix_prefix
 
         if self.settings.is_custom_export:
-            parent = self.settings.export_dir
+            parent = self.settings.export_dir_path
             suffix_prefix = self.settings.export_suffix_prefix
             if suffix_prefix:
                 if self.settings.naming_mode == 0:  # Suffix selected

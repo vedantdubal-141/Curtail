@@ -70,7 +70,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
             "changed", self.on_string_changed, "suffix-prefix"
         )
 
-        if self.settings.export_dir_enabled:
+        if self.settings.export_dir:
             self.toggle_new_file.set_active(True)
             self.toggle_new_file.set_sensitive(False)
             self.toggle_naming_mode.set_sensitive(True)
@@ -84,7 +84,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
             self.entry_suffix_prefix.set_text(self.settings.suffix_prefix)
 
         # Custom Export Directory
-        self.toggle_export_dir.set_active(self.settings.export_dir_enabled)
+        self.toggle_export_dir.set_active(self.settings.export_dir)
         self.toggle_export_dir.connect("notify::active", self.on_export_dir_toggled)
         self._update_export_dir_row()
         self.button_export_dir.connect("clicked", self.on_select_export_dir)
@@ -138,7 +138,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
         )
 
     def on_bool_changed(self, switch, state, key):
-        if key == "new-file" and self.settings.export_dir_enabled:
+        if key == "new-file" and self.settings.export_dir:
             return
         self.settings.set_boolean(key, switch.get_active())
         # Additional actions
@@ -159,7 +159,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
     def on_string_changed(self, entry, key):
         if key == "suffix-prefix":
             text = entry.get_text()
-            if self.settings.export_dir_enabled:
+            if self.settings.export_dir:
                 self.settings.export_suffix_prefix = text
             else:
                 self.settings.set_string(key, text)
@@ -171,17 +171,17 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
         self.settings.set_int(key, spin.get_value())
 
     def _update_export_dir_row(self):
-        is_enabled = self.settings.export_dir_enabled
+        is_enabled = self.settings.export_dir
         self.row_export_dir.set_sensitive(is_enabled)
-        export_dir = self.settings.export_dir
-        if export_dir:
-            self.row_export_dir.set_subtitle(export_dir)
+        export_dir_path = self.settings.export_dir_path
+        if export_dir_path:
+            self.row_export_dir.set_subtitle(export_dir_path)
         else:
             self.row_export_dir.set_subtitle(_("No directory selected"))
 
     def on_export_dir_toggled(self, switch, state):
         is_export = switch.get_active()
-        self.settings.export_dir_enabled = is_export
+        self.settings.export_dir = is_export
         self._update_export_dir_row()
 
         if is_export:
@@ -203,8 +203,9 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
     def on_select_export_dir(self, *args):
         dialog = Gtk.FileDialog(title=_("Select Export Directory"))
 
-        if self.settings.export_dir and os.path.isdir(self.settings.export_dir):
-            dialog.set_initial_folder(Gio.File.new_for_path(self.settings.export_dir))
+        export_dir_path = self.settings.export_dir_path
+        if export_dir_path and os.path.isdir(export_dir_path):
+            dialog.set_initial_folder(Gio.File.new_for_path(export_dir_path))
 
         def handle_response(dialog, result):
             try:
@@ -215,7 +216,7 @@ class CurtailPrefsDialog(Adw.PreferencesDialog):
                 if folder:
                     path = folder.get_path()
                     if path:
-                        self.settings.export_dir = path
+                        self.settings.export_dir_path = path
                         self._update_export_dir_row()
                         self.parent.show_warning_banner()
                         self.parent.set_saving_subtitle()
